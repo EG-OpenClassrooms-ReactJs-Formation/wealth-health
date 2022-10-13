@@ -1,13 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import store from './redux/store';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <Router>
+        <Header/>
+        <Routes>
+            <Route exact path="/employees_list" element={<EmployeesList/>}></Route>
+            <Route path="/login" element={<Login/>}></Route>
+            <Route path="/404" element={<Error/>}/>
+            <Route path="*" element={<Navigate replace to="/404" />} />
+          </Routes>
+        </Router>
+        <Footer/>
+      </Provider>
   </React.StrictMode>
 );
 
