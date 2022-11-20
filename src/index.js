@@ -2,22 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import store from './redux/store';
+import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
-
+import {Provider} from 'react-redux';
+import Error from './pages/Error/Error';
+import Home from './pages/Home/Home';
+import EmployeeList from './pages/EmployeeList/EmployeeList';
+import "react-datetime/css/react-datetime.css";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router>
-        <Header/>
         <Routes>
-            <Route exact path="/employees_list" element={<EmployeesList/>}></Route>
-            <Route path="/login" element={<Login/>}></Route>
+            <Route path="/" element={<Home/>}></Route>
+            <Route exact path="/employees_list" element={<EmployeeList/>}></Route>
             <Route path="/404" element={<Error/>}/>
             <Route path="*" element={<Navigate replace to="/404" />} />
           </Routes>
         </Router>
-        <Footer/>
       </Provider>
   </React.StrictMode>
 );
