@@ -16,9 +16,9 @@ export default function Home() {
 
     const [street, setStreet] = useState(null)
     const [city, setCity] = useState(null)
-    const [stateName, setStateName] = useState(null)
+    const [stateName, setStateName] = useState("AL")
     const [zip, setZip] = useState(null)
-    const [departement, setDepartement] = useState(null)
+    const [departement, setDepartement] = useState("Sales")
 
     const reformateDateFromMoment = (moment) => {
         let dateObject = moment.toDate()

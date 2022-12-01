@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const createInitialState = ()=>{
     const employees = JSON.parse(localStorage.getItem('employees'))
-    console.log(employees)
+    //console.log(employees)
     if (employees === null){
         localStorage.setItem('employees', JSON.stringify([]))
         return []
