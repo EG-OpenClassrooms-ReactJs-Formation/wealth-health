@@ -5,6 +5,10 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addEmployee } from '../../redux/slices/employeeSlice';
 
+import Modal from 'wealth-health-react-modal';
+import styles from 'wealth-health-react-modal/dist/index.css'
+import FormEmployee from '../../components/FormEmployee/FormEmployee';
+
 export default function Home() {
 
     const dispatch = useDispatch()
@@ -19,6 +23,8 @@ export default function Home() {
     const [stateName, setStateName] = useState("AL")
     const [zip, setZip] = useState(null)
     const [departement, setDepartement] = useState("Sales")
+
+    const [isOpen, setIsOpen] = useState(false)
 
     const reformateDateFromMoment = (moment) => {
         let dateObject = moment.toDate()
@@ -35,6 +41,7 @@ export default function Home() {
     }
 
     const saveEmployee = () => {
+        setIsOpen(true)
         dispatch(
             addEmployee({
                 firstName: firstName,
@@ -59,7 +66,7 @@ export default function Home() {
         <div className="container">
             <Link to='/employees_list'>View Current Employees</Link>
             <h2>Create Employee</h2>
-            <form action="#" id="create-employee">
+            {/* <form action="#" id="create-employee">
                 <label htmlFor="first-name">First Name</label>
                 <input type="text" id="first-name" onChange={(event)=>setFirstName(event.target.value)}/>
 
@@ -148,11 +155,13 @@ export default function Home() {
                     <option>Human Resources</option>
                     <option>Legal</option>
                 </select>
-            </form>
+            </form> */}
+            <FormEmployee/>
 
             <button onClick={saveEmployee}>Save</button>
         </div>
-        <div id="confirmation" className="modal">Employee Created!</div>
+        {isOpen && <Modal setIsOpen={setIsOpen} title={"Form sended"} content={"The employee has been created"}/>}
+        
     </div>
   )
 }

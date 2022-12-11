@@ -100,22 +100,20 @@ export default function EmployeesTable() {
 
 	const [filterText, setFilterText] = useState('');
 	const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-	// const filteredItems = employeesList.filter(
-	// 	item => item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase()),
-	// );
 	const filteredItems = employeesList.filter(
-		item => item.firstName.toLowerCase().includes(filterText.toLowerCase()) ||
-				item.lastName.toLowerCase().includes(filterText.toLowerCase()) ||
-				item.startDate.toLowerCase().includes(filterText.toLowerCase()) ||
-				item.department.toLowerCase().includes(filterText.toLowerCase()) ||
-				item.birthDate.toLowerCase().includes(filterText.toLowerCase()) ||
-				item.street.toLowerCase().includes(filterText.toLowerCase()) ||
-				item.city.toLowerCase().includes(filterText.toLowerCase()) ||
-				item.state.toLowerCase().includes(filterText.toLowerCase()) ||
-				item.zip.toLowerCase().includes(filterText.toLowerCase()),
+		item => item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase()),
 	);
-	console.log(filteredItems)
-	console.log(employeesList)
+	// const filteredItems = employeesList.filter(
+	// 	item => item.firstName.toLowerCase().includes(filterText.toLowerCase()) ||
+	// 			item.lastName.toLowerCase().includes(filterText.toLowerCase()) ||
+	// 			item.startDate.toLowerCase().includes(filterText.toLowerCase()) ||
+	// 			item.department.toLowerCase().includes(filterText.toLowerCase()) ||
+	// 			item.birthDate.toLowerCase().includes(filterText.toLowerCase()) ||
+	// 			item.street.toLowerCase().includes(filterText.toLowerCase()) ||
+	// 			item.city.toLowerCase().includes(filterText.toLowerCase()) ||
+	// 			item.state.toLowerCase().includes(filterText.toLowerCase()) ||
+	// 			item.zip.toLowerCase().includes(filterText.toLowerCase()),
+	// );
 	const subHeaderComponentMemo = React.useMemo(() => {
 		const handleClear = () => {
 				if (filterText) {

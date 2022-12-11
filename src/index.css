@@ -23,6 +23,9 @@ code {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  margin: auto;
+  width: 60%;
 }
 
 label {
