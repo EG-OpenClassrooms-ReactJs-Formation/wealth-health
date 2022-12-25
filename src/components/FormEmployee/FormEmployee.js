@@ -1,6 +1,9 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import * as Yup from 'yup';
 import {
     Paper,
@@ -12,39 +15,68 @@ import {
     Checkbox,
     Button,
     Select,
+    NativeSelect,
     InputLabel,
     MenuItem
   } from '@material-ui/core';
 export default function FormEmployee() {
-    const validationSchema = Yup.object().shape({
-        fullname: Yup.string().required('Fullname is required'),
-        username: Yup.string()
-          .required('Username is required')
-          .min(6, 'Username must be at least 6 characters')
-          .max(20, 'Username must not exceed 20 characters'),
-        email: Yup.string()
-          .required('Email is required')
-          .email('Email is invalid'),
-        password: Yup.string()
-          .required('Password is required')
-          .min(6, 'Password must be at least 6 characters')
-          .max(40, 'Password must not exceed 40 characters'),
-        confirmPassword: Yup.string()
-          .required('Confirm Password is required')
-          .oneOf([Yup.ref('password'), null], 'Confirm Password does not match'),
-        acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required')
-      });
-    const {
-        register,
-        control,
-        handleSubmit,
-        formState: { errors }
-        } = useForm({
-        resolver: yupResolver(validationSchema)
-    });
+    // const validationSchema = Yup.object().shape({
+    //     fullname: Yup.string().required('Fullname is required'),
+    //     username: Yup.string()
+    //       .required('Username is required')
+    //       .min(6, 'Username must be at least 6 characters')
+    //       .max(20, 'Username must not exceed 20 characters'),
+    //     email: Yup.string()
+    //       .required('Email is required')
+    //       .email('Email is invalid'),
+    //     password: Yup.string()
+    //       .required('Password is required')
+    //       .min(6, 'Password must be at least 6 characters')
+    //       .max(40, 'Password must not exceed 40 characters'),
+    //     confirmPassword: Yup.string()
+    //       .required('Confirm Password is required')
+    //       .oneOf([Yup.ref('password'), null], 'Confirm Password does not match'),
+    //     acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required')
+    //   });
+    // const {
+    //     register,
+    //     control,
+    //     handleSubmit,
+    //     formState: { errors }
+    //     } = useForm({
+    //     resolver: yupResolver(validationSchema)
+    // });
     const onSubmit = data => {
         console.log(JSON.stringify(data, null, 2));
-      };
+    };
+    // 
+    const [firstName, setFirstName] = useState(null)
+    const [lastName, setLastName] = useState(null)
+    const [startDate, setStartDate] = useState(null)
+    const [birthDate, setBirthDate] = useState(null)
+
+    const [street, setStreet] = useState(null)
+    const [city, setCity] = useState(null)
+    const [stateName, setStateName] = useState("AL")
+    const [zip, setZip] = useState(null)
+    const [departement, setDepartement] = useState("Sales")
+
+    const reformateDateFromMoment = (moment) => {
+        let dateObject = moment.toDate()
+        console.log(`${dateObject.getDate()}/${dateObject.getMonth()+1}/${dateObject.getFullYear()}`)
+        return `${dateObject.getDate()}/${dateObject.getMonth()+1}/${dateObject.getFullYear()}`
+    }
+
+    const startDateUpdate = (moment) => {
+        setStartDate(reformateDateFromMoment(moment))
+    }
+
+    const birthDateUpdate = (moment) => {
+        setBirthDate(reformateDateFromMoment(moment))
+    }
+    const handleSubmit = () => {
+        
+    }
   return (
     <Fragment>
         <Paper >
@@ -57,9 +89,9 @@ export default function FormEmployee() {
                     <Grid item xs={12} sm={12}>
                         <TextField
                             required
-                            id="fullname"
-                            name="fullname"
-                            label="Full Name"
+                            id="firstName"
+                            name="firstName"
+                            label="First name"
                             inputProps={{
                                 style: {
                                 padding: 15
@@ -67,19 +99,19 @@ export default function FormEmployee() {
                             }}
                             
                             margin="dense"
-                            {...register('fullname')}
-                            error={errors.fullname ? true : false}
+                            
+                            // error={errors.fullname ? true : false}
                         />
-                        <Typography variant="inherit" color="textSecondary">
+                        {/* <Typography variant="inherit" color="textSecondary">
                             {errors.fullname?.message}
-                        </Typography>
+                        </Typography> */}
                     </Grid>
                     <Grid item xs={12} sm={12}>
                     <TextField
                         required
-                        id="username"
-                        name="username"
-                        label="Username"
+                        id="lastName"
+                        name="lastName"
+                        label="Last name"
                         inputProps={{
                             style: {
                             padding: 15
@@ -87,32 +119,37 @@ export default function FormEmployee() {
                         }}
                         
                         margin="dense"
-                        {...register('username')}
-                        error={errors.username ? true : false}
+                        
+                        // error={errors.username ? true : false}
                     />
-                    <Typography variant="inherit" color="textSecondary">
+                    {/* <Typography variant="inherit" color="textSecondary">
                         {errors.username?.message}
-                    </Typography>
+                    </Typography> */}
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                    <TextField
-                        required
-                        id="email"
-                        name="email"
-                        label="Email"
-                        inputProps={{
-                            style: {
-                            padding: 15
-                            }
-                        }}
-                        
-                        margin="dense"
-                        {...register('email')}
-                        error={errors.email ? true : false}
-                    />
-                    <Typography variant="inherit" color="textSecondary">
-                        {errors.email?.message}
-                    </Typography>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DesktopDatePicker
+                                //label="Date desktop *"
+                                label={
+                                    <Typography sx={{ fontSize: 14, paddingTop:16 }} component="h3">Date desktop *</Typography>
+                                }
+                                inputProps={{
+                                    style: {
+                                    paddingTop: 25,
+                                    
+                                    }
+                                }}
+                                inputFormat="MM/DD/YYYY"
+                                value={startDate}
+                                onChange={setStartDate}
+                                renderInput={(params) => <TextField {...params} />}
+                                
+                            />
+                        </LocalizationProvider>
+                        {/* <Typography variant="inherit" color="textSecondary">
+                            {errors.email?.message}
+                        </Typography> */}
+                    
                     </Grid>
                     <Grid item xs={12} sm={12}>
                     <TextField
@@ -128,12 +165,12 @@ export default function FormEmployee() {
                         }}
                         
                         margin="dense"
-                        {...register('password')}
-                        error={errors.password ? true : false}
+                        
+                        // error={errors.password ? true : false}
                     />
-                    <Typography variant="inherit" color="textSecondary">
+                    {/* <Typography variant="inherit" color="textSecondary">
                         {errors.password?.message}
-                    </Typography>
+                    </Typography> */}
                     </Grid>
                     <Grid item xs={12} sm={12}>
                     <TextField
@@ -149,50 +186,21 @@ export default function FormEmployee() {
                             padding: 15
                             }
                         }}
-                        {...register('confirmPassword')}
-                        error={errors.confirmPassword ? true : false}
+                        
+                        // error={errors.confirmPassword ? true : false}
                     />
-                    <Typography variant="inherit" color="textSecondary">
+                    {/* <Typography variant="inherit" color="textSecondary">
                         {errors.confirmPassword?.message}
-                    </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                    <FormControlLabel
-                        control={
-                        <Controller
-                            control={control}
-                            name="acceptTerms"
-                            defaultValue="false"
-                            inputRef={register()}
-                            render={({ field: { onChange } }) => (
-                            <Checkbox
-                                color="primary"
-                                onChange={e => onChange(e.target.checked)}
-                            />
-                            )}
-                        />
-                        }
-                        label={
-                        <Typography color={errors.acceptTerms ? 'error' : 'inherit'}>
-                            I have read and agree to the Terms *
-                        </Typography>
-                        }
-                    />
-                    <br />
-                    <Typography variant="inherit" color="textSecondary">
-                        {errors.acceptTerms
-                        ? '(' + errors.acceptTerms.message + ')'
-                        : ''}
-                    </Typography>
+                    </Typography> */}
                     </Grid>
                 </Grid>
-                <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                <InputLabel id="demo-simple-select-label">State</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={"age"}
-                    label="Age"
-                    // onChange={handleChange}
+                    value={stateName}
+                    label="State"
+                    onChange={(event)=>setStateName(event.target.value)}
                 >
                     <MenuItem value={"AL"}>Alabama</MenuItem>
                     <MenuItem value={"AK"}>Alaska</MenuItem>
@@ -250,7 +258,7 @@ export default function FormEmployee() {
                     <Button
                     variant="contained"
                     color="primary"
-                    onClick={handleSubmit(onSubmit)}
+                    onClick={handleSubmit}
                     >
                     Register
                     </Button>
