@@ -1,4 +1,6 @@
 import React, { Fragment, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { addEmployee } from '../../redux/slices/employeeSlice';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -19,7 +21,7 @@ import {
     InputLabel,
     MenuItem
   } from '@material-ui/core';
-export default function FormEmployee() {
+export default function FormEmployee({setIsOpen}) {
     // const validationSchema = Yup.object().shape({
     //     fullname: Yup.string().required('Fullname is required'),
     //     username: Yup.string()
@@ -46,10 +48,8 @@ export default function FormEmployee() {
     //     } = useForm({
     //     resolver: yupResolver(validationSchema)
     // });
-    const onSubmit = data => {
-        console.log(JSON.stringify(data, null, 2));
-    };
-    // 
+    const dispatch = useDispatch()
+    
     const [firstName, setFirstName] = useState(null)
     const [lastName, setLastName] = useState(null)
     const [startDate, setStartDate] = useState(null)
@@ -68,14 +68,29 @@ export default function FormEmployee() {
     }
 
     const startDateUpdate = (moment) => {
-        setStartDate(reformateDateFromMoment(moment))
+        const formatedDate = reformateDateFromMoment(moment)
+        setStartDate(formatedDate)
+        
     }
 
     const birthDateUpdate = (moment) => {
         setBirthDate(reformateDateFromMoment(moment))
     }
-    const handleSubmit = () => {
-        
+    const saveEmployee = () => {
+        setIsOpen(true)
+        dispatch(
+            addEmployee({
+                firstName: firstName,
+                lastName: lastName,
+                startDate: startDate,
+                department: departement,
+                birthDate: birthDate,
+                street: street,
+                city: city,
+                state: stateName,
+                zip: zip,
+            })
+        )
     }
   return (
     <Fragment>
@@ -99,7 +114,7 @@ export default function FormEmployee() {
                             }}
                             
                             margin="dense"
-                            
+                            onChange={(event)=>setFirstName(event.target.value)}
                             // error={errors.fullname ? true : false}
                         />
                         {/* <Typography variant="inherit" color="textSecondary">
@@ -119,7 +134,7 @@ export default function FormEmployee() {
                         }}
                         
                         margin="dense"
-                        
+                        onChange={(event)=>setLastName(event.target.value)}
                         // error={errors.username ? true : false}
                     />
                     {/* <Typography variant="inherit" color="textSecondary">
@@ -131,7 +146,7 @@ export default function FormEmployee() {
                             <DesktopDatePicker
                                 //label="Date desktop *"
                                 label={
-                                    <Typography sx={{ fontSize: 14, paddingTop:16 }} component="h3">Date desktop *</Typography>
+                                    <Typography sx={{ fontSize: 14, paddingTop:16 }} component="h3">Birth Date *</Typography>
                                 }
                                 inputProps={{
                                     style: {
@@ -140,8 +155,8 @@ export default function FormEmployee() {
                                     }
                                 }}
                                 inputFormat="MM/DD/YYYY"
-                                value={startDate}
-                                onChange={setStartDate}
+                                value={birthDate}
+                                onChange={birthDateUpdate}
                                 renderInput={(params) => <TextField {...params} />}
                                 
                             />
@@ -152,12 +167,38 @@ export default function FormEmployee() {
                     
                     </Grid>
                     <Grid item xs={12} sm={12}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DesktopDatePicker
+                                //label="Date desktop *"
+                                label={
+                                    <Typography sx={{ fontSize: 14, paddingTop:16 }} component="h3">Start Date *</Typography>
+                                }
+                                inputProps={{
+                                    style: {
+                                    paddingTop: 25,
+                                    
+                                    }
+                                }}
+                                inputFormat="MM/DD/YYYY"
+                                value={startDate}
+                                onChange={startDateUpdate}
+                                renderInput={(params) => <TextField {...params} />}
+                                
+                            />
+                        </LocalizationProvider>
+                        {/* <Typography variant="inherit" color="textSecondary">
+                            {errors.email?.message}
+                        </Typography> */}
+                    
+                    </Grid>
+                    
+                </Grid>
+                <Grid item xs={12} sm={12}>
                     <TextField
                         required
-                        id="password"
-                        name="password"
-                        label="Password"
-                        type="password"
+                        id="street"
+                        name="street"
+                        label="Street"
                         inputProps={{
                             style: {
                             padding: 15
@@ -165,34 +206,53 @@ export default function FormEmployee() {
                         }}
                         
                         margin="dense"
-                        
-                        // error={errors.password ? true : false}
+                        onChange={(event)=>setStreet(event.target.value)}
+                        // error={errors.username ? true : false}
                     />
                     {/* <Typography variant="inherit" color="textSecondary">
-                        {errors.password?.message}
+                        {errors.username?.message}
                     </Typography> */}
-                    </Grid>
-                    <Grid item xs={12} sm={12}>
+                </Grid>
+                
+                <Grid item xs={12} sm={12}>
                     <TextField
                         required
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        label="Confirm Password"
-                        type="password"
-                        
-                        margin="dense"
+                        id="city"
+                        name="city"
+                        label="City"
                         inputProps={{
                             style: {
                             padding: 15
                             }
                         }}
                         
-                        // error={errors.confirmPassword ? true : false}
+                        margin="dense"
+                        onChange={(event)=>setCity(event.target.value)}
+                        // error={errors.username ? true : false}
                     />
                     {/* <Typography variant="inherit" color="textSecondary">
-                        {errors.confirmPassword?.message}
+                        {errors.username?.message}
                     </Typography> */}
-                    </Grid>
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                    <TextField
+                        required
+                        id="zip"
+                        name="zip"
+                        label="Zip"
+                        inputProps={{
+                            style: {
+                            padding: 15
+                            }
+                        }}
+                        
+                        margin="dense"
+                        onChange={(event)=>setZip(event.target.value)}
+                        // error={errors.username ? true : false}
+                    />
+                    {/* <Typography variant="inherit" color="textSecondary">
+                        {errors.username?.message}
+                    </Typography> */}
                 </Grid>
                 <InputLabel id="demo-simple-select-label">State</InputLabel>
                 <Select
@@ -254,13 +314,34 @@ export default function FormEmployee() {
                     <MenuItem value={"WI"}>Wisconsin</MenuItem>
                     <MenuItem value={"WY"}>Wyoming</MenuItem>
                 </Select>
+                
+                <Grid item xs={12} sm={12}>
+                    <TextField
+                        required
+                        id="departement"
+                        name="departement"
+                        label="Departement"
+                        inputProps={{
+                            style: {
+                            padding: 15
+                            }
+                        }}
+                        
+                        margin="dense"
+                        onChange={(event)=>setDepartement(event.target.value)}
+                        // error={errors.username ? true : false}
+                    />
+                    {/* <Typography variant="inherit" color="textSecondary">
+                        {errors.username?.message}
+                    </Typography> */}
+                </Grid>
                 <Box mt={3}>
                     <Button
                     variant="contained"
                     color="primary"
-                    onClick={handleSubmit}
+                    onClick={saveEmployee}
                     >
-                    Register
+                    Save
                     </Button>
                 </Box>
             </Box>
