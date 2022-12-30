@@ -21,7 +21,7 @@ import {
     InputLabel,
     MenuItem
   } from '@material-ui/core';
-export default function FormEmployee({setIsOpen}) {
+export default function FormEmployee({setIsOpen, setIsFormValid}) {
     // const validationSchema = Yup.object().shape({
     //     fullname: Yup.string().required('Fullname is required'),
     //     username: Yup.string()
@@ -78,19 +78,36 @@ export default function FormEmployee({setIsOpen}) {
     }
     const saveEmployee = () => {
         setIsOpen(true)
-        dispatch(
-            addEmployee({
-                firstName: firstName,
-                lastName: lastName,
-                startDate: startDate,
-                department: departement,
-                birthDate: birthDate,
-                street: street,
-                city: city,
-                state: stateName,
-                zip: zip,
-            })
-        )
+        const dataValidity = isFormValide()
+        if (dataValidity == true){
+            setIsFormValid(true)
+            dispatch(
+                addEmployee({
+                    firstName: firstName,
+                    lastName: lastName,
+                    startDate: startDate,
+                    department: departement,
+                    birthDate: birthDate,
+                    street: street,
+                    city: city,
+                    state: stateName,
+                    zip: zip,
+                })
+            )
+        }
+        else {
+            setIsFormValid(false)
+        }
+        
+    }
+    //TODO Improve the form validation
+    const isFormValide = () => {
+        if (firstName && lastName && startDate && departement && birthDate && street && city && stateName && zip){
+            return true
+        }
+        else{
+            return false
+        }
     }
   return (
     <Fragment>
@@ -315,7 +332,7 @@ export default function FormEmployee({setIsOpen}) {
                     <MenuItem value={"WY"}>Wyoming</MenuItem>
                 </Select>
                 
-                <Grid item xs={12} sm={12}>
+                {/* <Grid item xs={12} sm={12}>
                     <TextField
                         required
                         id="departement"
@@ -331,10 +348,23 @@ export default function FormEmployee({setIsOpen}) {
                         onChange={(event)=>setDepartement(event.target.value)}
                         // error={errors.username ? true : false}
                     />
-                    {/* <Typography variant="inherit" color="textSecondary">
-                        {errors.username?.message}
-                    </Typography> */}
-                </Grid>
+                    
+                </Grid> */}
+                <InputLabel id="departement-select-label">Departement</InputLabel>
+                <Select
+                    labelId="departement-select-label"
+                    id="departement-select"
+                    value={departement}
+                    label="State"
+                    onChange={(event)=>setDepartement(event.target.value)}
+                >
+                    <MenuItem value={"Sales"}>Sales</MenuItem>
+                    <MenuItem value={"Marketing"}>Marketing</MenuItem>
+                    <MenuItem value={"Engineering"}>Engineering</MenuItem>
+                    <MenuItem value={"Human Ressources"}>Human Ressources</MenuItem>
+                    <MenuItem value={"Legal"}>Legal</MenuItem>
+                    
+                </Select>
                 <Box mt={3}>
                     <Button
                     variant="contained"

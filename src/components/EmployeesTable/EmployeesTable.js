@@ -129,7 +129,7 @@ export default function EmployeesTable() {
 
     return (
         <DataTable 
-			title="Employee" 
+			// title="Employee" 
 			columns={columns} 
 			data={filteredItems} 
 			pagination
