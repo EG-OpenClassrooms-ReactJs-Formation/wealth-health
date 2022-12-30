@@ -254,6 +254,7 @@ export default function FormEmployee({setIsOpen, setIsFormValid}) {
                 <Grid item xs={12} sm={12}>
                     <TextField
                         required
+                        type="number"
                         id="zip"
                         name="zip"
                         label="Zip"
